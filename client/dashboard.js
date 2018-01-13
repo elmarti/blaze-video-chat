@@ -41,11 +41,11 @@ Template.dashboard.onCreated(function() {
             inProgress: false
         })
     };
-    
+
     Meteor.VideoCallServices.setOnError(err => {
         console.error(err);
         updateState({
-            statusText:err
+            statusText: err
         });
     });
 
@@ -68,17 +68,20 @@ Template.dashboard.helpers({
 
 Template.dashboard.events({
     "click .user-button" () {
-        Meteor.VideoCallServices.call({
-            id: this._id,
-            localElement: document.querySelector("#localVideo"),
-            remoteElement: document.querySelector("#remoteVideo"),
-            video: true,
-            audio: true
-        });
-        updateState({
-            statusText: "Calling " + this.email,
-            inProgress: true
-        })
+        console.log(this)
+        if (this.status) {
+            Meteor.VideoCallServices.call({
+                id: this._id,
+                localElement: document.querySelector("#localVideo"),
+                remoteElement: document.querySelector("#remoteVideo"),
+                video: true,
+                audio: true
+            });
+            updateState({
+                statusText: "Calling " + this.email,
+                inProgress: true
+            });
+        }
     },
     "click .answer-call" () {
         Meteor.VideoCallServices.answerCall({

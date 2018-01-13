@@ -1,20 +1,27 @@
 body {
-  padding-top: 50px;
+    padding-top: 50px;
 }
+
+video {
+    width: 80%;
+    background:black;
+}
+
 .starter-template {
-  padding: 40px 15px;
-  text-align: center;
+    padding: 40px 15px;
+    text-align: center;
 }
 
 #login-buttons {
-    padding-top:17px;
+    padding-top: 17px;
 }
 
-.online{
-    color:green;
-    cursor:pointer;
+.online {
+    color: green;
+    cursor: pointer;
 }
+
 .offline {
-    color:red;
-    cursor:not-allowed;
+    color: red;
+    cursor: not-allowed;
 }
