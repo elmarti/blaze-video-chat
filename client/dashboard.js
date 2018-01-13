@@ -57,8 +57,8 @@ Template.dashboard.helpers({
         Meteor.users.find({
             _id: {
                 $ne: Meteor.userId()
-            }
-        }).forEach(user => users.push({ email: user.emails[0].address, status: user.status.online, _id: user._id }));
+            } //Yes, I know this is bad and lazy, but I just tweaked it for the live version so I wasn't collecting peoples' emails
+        }).forEach(user => users.push({ email: user.username, status: user.status.online, _id: user._id }));
         return users;
     },
     getState() {
