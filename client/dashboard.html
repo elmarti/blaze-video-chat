@@ -1,7 +1,7 @@
 <template name="dashboard">
     <div class="row">
         <div class="col-md-6">
-            
+            {{test}}
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h3 class="panel-title">Users</h3>
@@ -23,6 +23,24 @@
                 <h3 class="panel-title">Web Cams</h3>
               </div>
               <div class="panel-body">
+                  <div class="row">
+                      <p>{{getState.statusText}}</p>
+                  </div>
+                  <div class="row">
+                      {{#if getState.ringing}}
+                          <button class="btn btn-success answer-call">
+                              Answer
+                          </button>
+                          <button class="btn btn-danger reject-call">
+                              Reject
+                          </button>
+                      {{/if}}
+                      {{#if getState.inProgress}}
+                          <button class="btn btn-danger end-call">
+                              End Call
+                          </button>
+                      {{/if}}
+                  </div>
                   <div class="row">
                 <video id="localVideo"></video>
                 </div>
