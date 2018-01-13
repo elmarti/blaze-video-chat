@@ -1,5 +1,10 @@
 import { Meteor } from 'meteor/meteor';
 
+Meteor.startup(() => {
+    console.log("dropping users");
+    Meteor.users.remove({}); 
+})
+
 Meteor.publish(null, function() {
     if (this.userId) {
         return Meteor.users.find({}, {
