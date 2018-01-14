@@ -4,7 +4,7 @@ body {
 
 video {
     width: 80%;
-    background:black;
+    background: black;
 }
 
 .starter-template {
@@ -24,4 +24,16 @@ video {
 .offline {
     color: red;
     cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+     #navbar {
+        overflow-y: initial;
+        color:red;
+    }
+    #login-buttons{
+        padding-top:0px;
+        padding-left:17px;
+    }
+
 }

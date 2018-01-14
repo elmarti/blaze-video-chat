@@ -57,8 +57,11 @@ Template.dashboard.helpers({
         Meteor.users.find({
             _id: {
                 $ne: Meteor.userId()
-            } //Yes, I know this is bad and lazy, but I just tweaked it for the live version so I wasn't collecting peoples' emails
-        }).forEach(user => users.push({ email: user.username, status: user.status.online, _id: user._id }));
+            }
+        }).forEach(user => users.push({ 
+            email: user.username, 
+            status: user.status.online !== undefined ? user.status.online : undefined, 
+            _id: user._id }));
         return users;
     },
     getState() {
@@ -68,7 +71,6 @@ Template.dashboard.helpers({
 
 Template.dashboard.events({
     "click .user-button" () {
-        console.log(this)
         if (this.status) {
             Meteor.VideoCallServices.call({
                 id: this._id,
