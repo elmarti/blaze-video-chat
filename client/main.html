@@ -29,13 +29,12 @@
 
   <div class="container">
 
-    <div class="starter-template">
-      {{#if loggedIn}} {{> dashboard}} {{else}}
+    <div class="app-body">
+      {{#if currentUser}} {{> dashboard}} {{else}}
       <h1>Please log in</h1>
       {{/if}}
     </div>
   </div>
-  <!-- /.container -->
 
 
 
