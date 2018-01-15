@@ -7,7 +7,7 @@ video {
     background: black;
 }
 
-.starter-template {
+.chat-body {
     padding: 40px 15px;
     text-align: center;
 }
@@ -29,11 +29,9 @@ video {
 @media (max-width: 768px) {
      #navbar {
         overflow-y: initial;
-        color:red;
     }
     #login-buttons{
-        padding-top:0px;
-        padding-left:17px;
+        padding:0px 17px;
     }
 
 }
