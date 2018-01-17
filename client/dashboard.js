@@ -20,7 +20,11 @@ Template.dashboard.onCreated(function() {
         }]
     }]);
     Meteor.VideoCallServices.onReceiveCall = (userId) => {
+        const user = Meteor.users.findOne({
+            _id:userId
+        });
         updateState({
+            statusText:"Recieving call from " + user.emails[0].address,
             ringing: true
         });
     };
