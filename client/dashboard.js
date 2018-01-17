@@ -32,7 +32,8 @@ Template.dashboard.onCreated(function() {
     Meteor.VideoCallServices.onTerminateCall = () => {
         updateState({
             statusText: "Call terminated",
-            inProgress: false
+            inProgress: false,
+            ringing: false
         });
     };
     Meteor.VideoCallServices.onCallRejected = () => {
