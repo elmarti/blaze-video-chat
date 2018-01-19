@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
-
+import { VideoCallServices } from 'meteor/elmarti:video-chat';
 
 //Redux style state management - immutable state tree
 const dashboardState = new ReactiveVar({
@@ -14,35 +14,40 @@ const updateState = (newData) => {
     dashboardState.set(Object.assign({}, oldState, newData));
 };
 Template.dashboard.onCreated(function() {
-    Meteor.VideoCallServices.init([{
+    VideoCallServices.init([{
         'iceServers': [{
             'urls': 'stun:stun.example.org'
         }]
     }]);
-    Meteor.VideoCallServices.onReceiveCall = (userId) => {
+    VideoCallServices.onReceiveCall = (userId) => {
+        const user = Meteor.users.findOne({
+            _id:userId
+        });
         updateState({
+            statusText:"Recieving call from " + user.emails[0].address,
             ringing: true
         });
     };
-    Meteor.VideoCallServices.onTargetAccept = () => {
+    VideoCallServices.onTargetAccept = () => {
         updateState({
             statusText: "Target accepted"
         })
     };
-    Meteor.VideoCallServices.onTerminateCall = () => {
+    VideoCallServices.onTerminateCall = () => {
         updateState({
             statusText: "Call terminated",
-            inProgress: false
+            inProgress: false,
+            ringing: false
         });
     };
-    Meteor.VideoCallServices.onCallRejected = () => {
+    VideoCallServices.onCallRejected = () => {
         updateState({
             statusText: "Call rejected",
             inProgress: false
         })
     };
 
-    Meteor.VideoCallServices.setOnError(err => {
+    VideoCallServices.setOnError(err => {
         console.error(err);
         updateState({
             statusText: err
@@ -72,7 +77,7 @@ Template.dashboard.helpers({
 Template.dashboard.events({
     "click .user-button" () {
         if (this.status) {
-            Meteor.VideoCallServices.call({
+            VideoCallServices.call({
                 id: this._id,
                 localElement: document.querySelector("#localVideo"),
                 remoteElement: document.querySelector("#remoteVideo"),
@@ -86,7 +91,7 @@ Template.dashboard.events({
         }
     },
     "click .answer-call" () {
-        Meteor.VideoCallServices.answerCall({
+        VideoCallServices.answerCall({
             localElement: document.querySelector("#localVideo"),
             remoteElement: document.querySelector("#remoteVideo"),
             video: true,
@@ -99,14 +104,14 @@ Template.dashboard.events({
         });
     },
     "click .reject-call" () {
-        Meteor.VideoCallServices.rejectCall();
+        VideoCallServices.rejectCall();
         updateState({
             ringing: false,
             statusText: "Call rejected"
         });
     },
     "click .end-call" () {
-        Meteor.VideoCallServices.endCall();
+        VideoCallServices.endCall();
         updateState({
             inProgress: false,
             statusText: "Call ended"
