@@ -24,7 +24,7 @@ Template.dashboard.onCreated(function() {
             _id:userId
         });
         updateState({
-            statusText:"Recieving call from " + user.emails[0].address,
+            statusText:"Recieving call from " + user.username,
             ringing: true
         });
     };
