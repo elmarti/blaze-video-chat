@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-
+import { VideoCallServices } from 'meteor/elmarti:video-chat';
 Meteor.publish(null, function() {
     if (this.userId) {
         return Meteor.users.find({}, {
@@ -10,4 +10,12 @@ Meteor.publish(null, function() {
             }
         });
     }
+});
+
+VideoCallServices.setOnError(err => {
+   console.log("server side error", err); 
+});
+VideoCallServices.checkConnect((callerId, targetId) => {
+    console.info("Checking user access privileges", callerId, targetId);
+    return callerId && targetId;
 });
