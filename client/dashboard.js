@@ -15,9 +15,8 @@ const updateState = (newData) => {
 };
 Template.dashboard.onCreated(function() {
     VideoCallServices.init([{
-        'iceServers': [{
-            'urls': 'stun:stun.example.org'
-        }]
+        'iceServers': [
+            {url:'stun:stun.l.google.com:19302'}]
     }]);
     VideoCallServices.onReceiveCall = (userId) => {
         const user = Meteor.users.findOne({
