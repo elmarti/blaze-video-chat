@@ -14,16 +14,19 @@ const updateState = (newData) => {
     dashboardState.set(Object.assign({}, oldState, newData));
 };
 Template.dashboard.onCreated(function() {
-    VideoCallServices.init([{
-        'iceServers': [
-            {url:'stun:stun.l.google.com:19302'}]
-    }]);
+    VideoCallServices.init({
+        'iceServers': [{ urls: 'stun:stun.l.google.com:19302' },
+            { urls: 'stun:stun2.l.google.com:19302' }, { urls: 'stun:stun3.l.google.com:19302' },
+            { urls: 'stun:stun4.l.google.com:19302' }
+        ]
+    });
     VideoCallServices.onReceiveCall = (userId) => {
         const user = Meteor.users.findOne({
-            _id:userId
+            _id: userId
         });
         updateState({
             statusText:"Recieving call from " + user.username,
+
             ringing: true
         });
     };
@@ -62,10 +65,12 @@ Template.dashboard.helpers({
             _id: {
                 $ne: Meteor.userId()
             }
+
         }).forEach(user => users.push({ 
             email: user.username, 
             status: user.status.online !== undefined ? user.status.online : undefined, 
             _id: user._id }));
+
         return users;
     },
     getState() {
