@@ -45,7 +45,7 @@
                 <video id="localVideo"></video>
                 <div class="row"> Local
                 {{#if getState "inProgress"}}
-                    {{#if getState "localMute"}}
+                    {{#if getState "localMuted"}}
                        <button class="btn btn-danger mute-local">
                               UnMute
                         </button>
@@ -62,7 +62,7 @@
                     <div class="row">
                         Remote
                         {{#if getState "inProgress"}}
-                            {{#if getState "localMute"}}
+                            {{#if getState "remoteMuted"}}
                                <button class="btn btn-danger mute-remote">
                                       UnMute
                                 </button>
