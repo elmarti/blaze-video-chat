@@ -3,16 +3,7 @@ import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { VideoCallServices } from 'meteor/elmarti:video-chat';
 
-//Redux style state management - immutable state tree
-const dashboardState = new ReactiveVar({
-    ringing: false,
-    statusText: "",
-    inProgress: false
-});
-const updateState = (newData) => {
-    const oldState = dashboardState.get();
-    dashboardState.set(Object.assign({}, oldState, newData));
-};
+const statusText = new ReactiveVar("");
 Template.dashboard.onCreated(function() {
     VideoCallServices.init({
         'iceServers': [{ urls: 'stun:stun.l.google.com:19302' },
@@ -24,35 +15,21 @@ Template.dashboard.onCreated(function() {
         const user = Meteor.users.findOne({
             _id: userId
         });
-        updateState({
-            statusText: "Recieving call from " + user.emails[0].address,
-            ringing: true
-        });
+        statusText.set("Recieving call from " + user.emails[0].address);
     };
     VideoCallServices.onTargetAccept = () => {
-        updateState({
-            statusText: "Target accepted"
-        })
+        statusText.set('Target accepted');
     };
     VideoCallServices.onTerminateCall = () => {
-        updateState({
-            statusText: "Call terminated",
-            inProgress: false,
-            ringing: false
-        });
+        statusText.set('Call terminated');
     };
     VideoCallServices.onCallRejected = () => {
-        updateState({
-            statusText: "Call rejected",
-            inProgress: false
-        })
+        statusText.set('Call rejected');
     };
 
     VideoCallServices.setOnError(err => {
         console.error(err);
-        updateState({
-            statusText: err
-        });
+        statusText.set(err);
     });
 
 
@@ -71,8 +48,11 @@ Template.dashboard.helpers({
         }));
         return users;
     },
-    getState() {
-        return dashboardState.get();
+    getState(key) {
+        return VideoCallServices.getState(key);
+    },
+    getStatusText() {
+        return statusText.get();
     }
 });
 
@@ -86,10 +66,7 @@ Template.dashboard.events({
                 video: true,
                 audio: true
             });
-            updateState({
-                statusText: "Calling " + this.email,
-                inProgress: true
-            });
+            statusText.set("Calling " + this.email);
         }
     },
     "click .answer-call" () {
@@ -99,24 +76,21 @@ Template.dashboard.events({
             video: true,
             audio: true
         });
-        updateState({
-            ringing: false,
-            inProgress: true,
-            statusText: "Connected"
-        });
+        statusText.set("Connected");
     },
     "click .reject-call" () {
         VideoCallServices.rejectCall();
-        updateState({
-            ringing: false,
-            statusText: "Call rejected"
-        });
+        statusText.set("Call rejected");
     },
     "click .end-call" () {
         VideoCallServices.endCall();
-        updateState({
-            inProgress: false,
-            statusText: "Call ended"
-        })
+        statusText.set("Call ended");
+    },
+    "click .mute-local" () {
+        VideoCallServices.toggleLocalAudio();
+    },
+    "click .mute-remote" () {
+        VideoCallServices.toggleRemoteAudio();
+
     }
 })
