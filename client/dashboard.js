@@ -15,7 +15,7 @@ Template.dashboard.onCreated(function() {
         const user = Meteor.users.findOne({
             _id: userId
         });
-        statusText.set("Recieving call from " + user.emails[0].address);
+        statusText.set(`Recieving call from ${user.emails[0].address}`);
     };
     VideoCallServices.onTargetAccept = () => {
         statusText.set('Target accepted');
@@ -66,7 +66,7 @@ Template.dashboard.events({
                 video: true,
                 audio: true
             });
-            statusText.set("Calling " + this.email);
+            statusText.set(`Calling ${this.email}`);
         }
     },
     "click .answer-call" () {
